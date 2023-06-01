@@ -2,7 +2,7 @@ from datetime import datetime
 from sqlmodel import Column, DateTime, Field, SQLModel
 
 
-class BaseCustomer(SQLModel):
+class CustomerBase(SQLModel):
     """
     Customer
     Base model shared some common attributes.
@@ -12,7 +12,7 @@ class BaseCustomer(SQLModel):
     name: str
 
 
-class CustomerTable(BaseCustomer, table=True):
+class CustomerTable(CustomerBase, table=True):
     """
     Customer
     The database model.
@@ -28,7 +28,7 @@ class CustomerTable(BaseCustomer, table=True):
     )
 
 
-class Customer(BaseCustomer):
+class Customer(CustomerBase):
     """
     Customer
     API model.
@@ -38,7 +38,7 @@ class Customer(BaseCustomer):
     created_at: datetime
 
 
-class CustomerCreate(BaseCustomer):
+class CustomerCreate(CustomerBase):
     """
     Customer creation model.
 

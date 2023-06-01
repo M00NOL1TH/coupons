@@ -12,7 +12,7 @@ class DiscountType(str, Enum):
     percentage = "percentage"
 
 
-class BaseCoupon(SQLModel):
+class CouponBase(SQLModel):
     """
     Coupon
     Base model shared some common attributes.
@@ -24,7 +24,7 @@ class BaseCoupon(SQLModel):
     discount_type: DiscountType
 
 
-class CouponTable(BaseCoupon, table=True):
+class CouponTable(CouponBase, table=True):
     """
     Coupon
     The database model.
@@ -40,7 +40,7 @@ class CouponTable(BaseCoupon, table=True):
     )
 
 
-class Coupon(BaseCoupon):
+class Coupon(CouponBase):
     """
     Coupon
     API model.
@@ -50,7 +50,7 @@ class Coupon(BaseCoupon):
     created_at: datetime
 
 
-class CouponCreate(BaseCoupon):
+class CouponCreate(CouponBase):
     """
     Coupon creation model.
 
@@ -61,7 +61,7 @@ class CouponCreate(BaseCoupon):
     - discount_type
     """
 
-    ...
+    pass
 
 
 class CouponUpdate(SQLModel):
@@ -74,4 +74,4 @@ class CouponUpdate(SQLModel):
     """
 
     description: str | None
-    discount: int
+    discount: int | None
