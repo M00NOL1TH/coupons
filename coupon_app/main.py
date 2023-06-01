@@ -1,4 +1,5 @@
 from fastapi import FastAPI, Depends
+from fastapi.responses import RedirectResponse
 from sqlalchemy.future import Engine
 from sqlmodel import create_engine, Session, SQLModel
 from typing import Generator
@@ -40,7 +41,17 @@ def create_app() -> FastAPI:
     """
     Creates a new application instance.
     """
-    app = FastAPI()
+    from coupon_model.coupon.metadata import metadata as coupons_metadata
+    from coupon_model.customer.metadata import metadata as customers_metadata
+
+    tags_metadata = [coupons_metadata, customers_metadata]
+
+    app = FastAPI(
+        title="CouponAPI",
+        description="Simple coupon app with FastAPI, SQLModel and PostgresSQL",
+        version="0.0.1",
+        openapi_tags=tags_metadata,
+    )
     settings = get_settings()
 
     # Init DB and create tables at startup
@@ -63,8 +74,8 @@ def create_app() -> FastAPI:
 
     register_routes(app, api_prefix=settings.api_prefix)
 
-    @app.get("/")
-    def root():
-        return {"Hello": "Coupon app"}
+    @app.get("/", response_class=RedirectResponse)
+    def redirect_docs():
+        return "/docs"
 
     return app
