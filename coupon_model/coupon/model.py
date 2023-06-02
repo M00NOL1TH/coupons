@@ -90,3 +90,12 @@ class CouponStatus(BaseModel):
 
     is_active: bool
     is_valid: bool
+
+
+class CouponApplied(BaseModel):
+    """
+    A discount earned by a used coupon.
+    """
+
+    discount: int
+    discount_type: DiscountType

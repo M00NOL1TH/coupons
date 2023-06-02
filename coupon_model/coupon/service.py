@@ -4,7 +4,7 @@ from sqlmodel import select, Session
 
 from coupon_utils.service import CommitFailed, NotFound, ValidationFailed
 
-from .model import CouponCreate, CouponStatus, CouponTable, CouponUpdate
+from .model import CouponCreate, CouponStatus, CouponTable, CouponUpdate, CouponApplied
 
 
 class CouponService:
@@ -135,17 +135,16 @@ class CouponService:
         is_valid = True if coupon.valid_from <= datetime.utcnow() < coupon.valid_until else False
         return CouponStatus(is_active=coupon.is_active, is_valid=is_valid)
 
-    def apply_by_code(self, code: str) -> None:
+    def apply_by_code(self, code: str) -> CouponApplied:
         """
         Apply a coupon.
         """
         session = self._session
 
         db_item = self.get_by_code(code)
-        is_valid = True if db_item.valid_from <= datetime.utcnow() < db_item.valid_until else False
         if db_item is None:
             raise NotFound(f"Coupon: {id}")
-        elif db_item.is_active and is_valid:
+        elif db_item.is_active and db_item.valid_from <= datetime.utcnow() < db_item.valid_until:
             setattr(db_item, "is_active", False)
         else:
             raise ValidationFailed("Coupon is not available.")
@@ -154,3 +153,5 @@ class CouponService:
             session.commit()
         except Exception:
             raise CommitFailed("Failed to apply the coupon.")
+
+        return CouponApplied(discount=db_item.discount, discount_type=db_item.discount_type)

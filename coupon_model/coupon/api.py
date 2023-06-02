@@ -5,7 +5,7 @@ from typing_extensions import Annotated
 from coupon_app.typings import SessionContextProvider
 from coupon_utils.service import CommitFailed, NotFound, ValidationFailed
 
-from .model import Coupon, CouponCreate, CouponStatus, CouponUpdate
+from .model import Coupon, CouponApplied, CouponCreate, CouponStatus, CouponUpdate
 from .service import CouponService
 
 
@@ -114,13 +114,13 @@ def make_routes(*, session_provider: SessionContextProvider) -> APIRouter:
         except NotFound:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Coupon not found: {id}.")
 
-    @router.patch("/apply/{code}")
+    @router.patch("/apply/{code}", response_model=CouponApplied)
     def apply_by_code(*, service: ServiceProvider, code: str):
         """
         Apply a coupon.
         """
         try:
-            service.apply_by_code(code)
+            return service.apply_by_code(code)
         except ValidationFailed:
             raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail=f"Coupon not available: {code}.")
         except NotFound:
