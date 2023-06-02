@@ -9,18 +9,18 @@ There are five types of coupons:
 
 -   percentage discount
 -   fixed amount discount
--   some gift - it doesn't affect the price, just surprise me
--   queue bump - I'm with a baby :)
--   reduced fare for a reseller if she issues a sufficient number of coupons
+-   ~~some gift - it doesn't affect the price, just surprise me~~
+-   ~~queue bump - I'm with a baby :)~~
+-   ~~reduced fare or bonus for a reseller if she issues a sufficient number of coupons~~
 
 The application should provide a REST API for:
 
 -   creating coupons,
 -   checking coupon validity,
--   activting/using coupon.
+-   activating or using coupon.
 
 Because this is a super simple app skeleton, it doesn't use currency, just simple decimal numbers with limited precision.
-A coupon can only be used by one customer and can only be used once.
+~~A coupon can only be used by one customer and can only be used once.~~
 
 ## Schema
 
@@ -30,15 +30,30 @@ A coupon can only be used by one customer and can only be used once.
 -   code (unique, str)
 -   description (str)
 -   created_at (datetime)
--   customer (optional, foreign key)
 -   discount_type (enum)
 -   discount (int)
+-   valid_from (datetime)
+-   valid_until (datetime)
+-   is_active (boolean)
 
 **Customer**
 
 -   id (primary key)
 -   name (str)
 -   created_at (datetime)
+
+**Reseller**
+
+-   id (primary key)
+-   name (str)
+-   created_at (datetime)
+-   bonus (int)
+
+**Coupon-Customer-Reseller-Link**
+
+-   coupon (foreign key)
+-   customer (foreign key)
+-   reseller (foreign key)
 
 ## Configuration
 
@@ -53,3 +68,7 @@ Get help with this: `python -m coupon_cli.main --help`.
 
 -   Clear connected db: `python -m coupon_cli.main clear-db`
 -   Executes the demo fixture: `python -m coupon_cli.main demo-fixture`
+
+## Testing
+
+Testing with pytest: run `pytest coupon_tests/` in the activated virtualenv.
