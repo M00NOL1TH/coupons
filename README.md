@@ -19,7 +19,7 @@ The application should provide a REST API for:
 -   checking coupon validity,
 -   activating or using coupon.
 
-Because this is a super simple app skeleton, it doesn't use currency, just simple decimal numbers with limited precision.
+Because this is a super simple app skeleton, it doesn't use currency~~, just simple decimal numbers with limited precision~~.
 ~~A coupon can only be used by one customer and can only be used once.~~
 
 ## Schema
@@ -53,7 +53,7 @@ Because this is a super simple app skeleton, it doesn't use currency, just simpl
 
 -   coupon (foreign key)
 -   customer (foreign key)
--   reseller (foreign key)
+-   ~~reseller (foreign key)~~
 
 ## Configuration
 
