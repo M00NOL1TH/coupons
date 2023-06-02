@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 import random
 import string
 
-from sqlmodel import Session, SQLModel
+from sqlmodel import select, Session, SQLModel
 from typer import Typer
 
 from coupon_app.main import get_db_engine
@@ -10,6 +10,7 @@ from coupon_app.settings import get_settings
 from coupon_model import init_models  # noqa
 from coupon_model.coupon.model import CouponTable, CouponCreate, DiscountType
 from coupon_model.customer.model import CustomerTable, CustomerCreate
+from coupon_model.coupon_customer_link.model import CouponCustomerLinkTable
 
 
 app = Typer()
@@ -83,6 +84,26 @@ def demo_fixture():
                 for i in range(20)
             ]
         )
+
+        session.commit()
+
+        print("Create coupon-customer links")
+
+        all_coupons = session.exec(select(CouponTable)).all()
+
+        def get_random_coupons() -> list[CouponTable]:
+            return random.sample(all_coupons, 3)
+
+        for customer in session.exec(select(CustomerTable)).all():
+            session.add_all(
+                [
+                    CouponCustomerLinkTable(
+                        coupon_id=coupon.id,
+                        customer_id=customer.id,
+                    )
+                    for coupon in get_random_coupons()
+                ]
+            )
 
         session.commit()
 

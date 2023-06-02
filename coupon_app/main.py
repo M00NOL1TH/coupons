@@ -32,9 +32,13 @@ def register_routes(app: FastAPI, *, api_prefix="/api/v1") -> None:
     """
     from coupon_model.coupon.api import make_routes as make_coupon_routes
     from coupon_model.customer.api import make_routes as make_customer_routes
+    from coupon_model.reseller.api import make_routes as make_reseller_routes
+    from coupon_model.coupon_customer_link.api import make_routes as make_coupon_customer_link_routes
 
     app.include_router(make_coupon_routes(session_provider=get_db_session), prefix=api_prefix)
     app.include_router(make_customer_routes(session_provider=get_db_session), prefix=api_prefix)
+    app.include_router(make_reseller_routes(session_provider=get_db_session), prefix=api_prefix)
+    app.include_router(make_coupon_customer_link_routes(session_provider=get_db_session), prefix=api_prefix)
 
 
 def create_app() -> FastAPI:
@@ -43,8 +47,10 @@ def create_app() -> FastAPI:
     """
     from coupon_model.coupon.metadata import metadata as coupons_metadata
     from coupon_model.customer.metadata import metadata as customers_metadata
+    from coupon_model.reseller.metadata import metadata as reseller_metadata
+    from coupon_model.coupon_customer_link.metadata import metadata as coupon_customer_link_metadata
 
-    tags_metadata = [coupons_metadata, customers_metadata]
+    tags_metadata = [coupons_metadata, customers_metadata, reseller_metadata, coupon_customer_link_metadata]
 
     app = FastAPI(
         title="CouponAPI",

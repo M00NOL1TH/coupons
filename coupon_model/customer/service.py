@@ -82,7 +82,7 @@ class CustomerService:
 
     def update(self, id: int, data: CustomerUpdate) -> CustomerTable:
         """
-        Update a customer with the given primary key.
+        Update a customer with the given ID.
 
         Arguments:
             id: Customer database ID.

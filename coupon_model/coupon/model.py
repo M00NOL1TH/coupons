@@ -1,7 +1,14 @@
+from typing import TYPE_CHECKING
+
 from datetime import datetime
-from pydantic import BaseModel
-from sqlmodel import Column, DateTime, Field, SQLModel
 from enum import Enum
+from pydantic import BaseModel
+from sqlmodel import Column, DateTime, Field, Relationship, SQLModel
+
+from coupon_model.coupon_customer_link.model import CouponCustomerLinkTable
+
+if TYPE_CHECKING:
+    from coupon_model.customer.model import Customer, CustomerTable
 
 
 class DiscountType(str, Enum):
@@ -42,6 +49,8 @@ class CouponTable(CouponBase, table=True):
     created_at: datetime | None = Field(
         default_factory=datetime.utcnow, sa_column=Column(DateTime(timezone=True), nullable=False)
     )
+
+    customers: list["CustomerTable"] = Relationship(back_populates="coupons", link_model=CouponCustomerLinkTable)
 
 
 class Coupon(CouponBase):

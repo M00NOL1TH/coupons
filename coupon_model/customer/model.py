@@ -1,5 +1,12 @@
+from typing import TYPE_CHECKING
+
 from datetime import datetime
-from sqlmodel import Column, DateTime, Field, SQLModel
+from sqlmodel import Column, DateTime, Field, Relationship, SQLModel
+
+from coupon_model.coupon_customer_link.model import CouponCustomerLinkTable
+
+if TYPE_CHECKING:
+    from coupon_model.coupon.model import Coupon, CouponTable
 
 
 class CustomerBase(SQLModel):
@@ -26,6 +33,8 @@ class CustomerTable(CustomerBase, table=True):
     created_at: datetime | None = Field(
         default_factory=datetime.utcnow, sa_column=Column(DateTime(timezone=True), nullable=False)
     )
+
+    coupons: list["CouponTable"] = Relationship(back_populates="customers", link_model=CouponCustomerLinkTable)
 
 
 class Customer(CustomerBase):
