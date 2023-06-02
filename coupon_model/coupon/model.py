@@ -1,4 +1,5 @@
 from datetime import datetime
+from pydantic import BaseModel
 from sqlmodel import Column, DateTime, Field, SQLModel
 from enum import Enum
 
@@ -22,6 +23,9 @@ class CouponBase(SQLModel):
     description: str
     discount: int
     discount_type: DiscountType
+    is_active: bool
+    valid_from: datetime
+    valid_until: datetime
 
 
 class CouponTable(CouponBase, table=True):
@@ -75,3 +79,14 @@ class CouponUpdate(SQLModel):
 
     description: str | None
     discount: int | None
+    valid_from: datetime | None
+    valid_until: datetime | None
+
+
+class CouponStatus(BaseModel):
+    """
+    Coupon status response model.
+    """
+
+    is_active: bool
+    is_valid: bool
