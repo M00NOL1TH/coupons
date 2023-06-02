@@ -8,7 +8,7 @@ from sqlmodel import Column, DateTime, Field, Relationship, SQLModel
 from coupon_model.coupon_customer_link.model import CouponCustomerLinkTable
 
 if TYPE_CHECKING:
-    from coupon_model.customer.model import Customer, CustomerTable
+    from coupon_model.customer.model import CustomerTable
 
 
 class DiscountType(str, Enum):

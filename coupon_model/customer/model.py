@@ -6,7 +6,7 @@ from sqlmodel import Column, DateTime, Field, Relationship, SQLModel
 from coupon_model.coupon_customer_link.model import CouponCustomerLinkTable
 
 if TYPE_CHECKING:
-    from coupon_model.coupon.model import Coupon, CouponTable
+    from coupon_model.coupon.model import CouponTable
 
 
 class CustomerBase(SQLModel):
